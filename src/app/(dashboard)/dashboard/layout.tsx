@@ -5,8 +5,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FC, ReactNode } from "react";
 import Image from "next/image";
-import SignOutButton from '@/components/SignOutButton'
+import SignOutButton from "@/components/SignOutButton";
 import FriendRequestSidebarOptions from "@/components/FriendRequestSidebarOptions";
+import { fetchRedis } from "@/helpers/redis";
 
 interface LayoutProps {
   children: ReactNode;
@@ -31,6 +32,13 @@ const sidebarOptions: SidebarOption[] = [
 const Layout = async ({ children }: LayoutProps) => {
   const session = await getServerSession(authOptions);
   if (!session) notFound();
+
+  const unseenRequestCount = (
+    (await fetchRedis(
+      'smembers',
+      `user:${session.user.id}:incoming_friend_requests`
+    )) as User[]
+  ).length
 
   return (
     <div className="w-full flex h-screen">
@@ -73,17 +81,12 @@ const Layout = async ({ children }: LayoutProps) => {
                   );
                 })}
 
-
-
-
                 <li>
                   <FriendRequestSidebarOptions
-                    // sessionId={session.user.id}
-                    // initialUnseenRequestCount={unseenRequestCount}
+                    sessionId={session.user.id}
+                    initialUnseenRequestCount={unseenRequestCount}
                   />
                 </li>
-
-
               </ul>
             </li>
 
@@ -99,7 +102,7 @@ const Layout = async ({ children }: LayoutProps) => {
                   />
                 </div>
 
-              <span className="sr-only">Your profile</span>
+                <span className="sr-only">Your profile</span>
                 <div className="flex flex-col">
                   <span aria-hidden="true">{session.user.name}</span>
                   <span className="text-xs text-zinc-400" aria-hidden="true">
@@ -108,7 +111,7 @@ const Layout = async ({ children }: LayoutProps) => {
                 </div>
               </div>
 
-              <SignOutButton className='h-full aspect-square d-flex items-center justify-center' />
+              <SignOutButton className="h-full aspect-square d-flex items-center justify-center" />
             </li>
           </ul>
         </nav>
