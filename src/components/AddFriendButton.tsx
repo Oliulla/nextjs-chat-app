@@ -1,9 +1,9 @@
 "use client";
 
-import { FC, useState } from "react";
-import Button from "./ui/Button";
 import { addFriendValidator } from "@/lib/validations/add-friend";
 import axios, { AxiosError } from "axios";
+import { FC, useState } from "react";
+import Button from "./ui/Button";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -43,7 +43,8 @@ const AddFriendButton: FC<AddFriendButtonProps> = ({}) => {
         setError("email", { message: error.response?.data });
         return;
       }
-      setError("email", { message: "something went wrong!!!" });
+
+      setError("email", { message: "Something went wrong." });
     }
   };
 
@@ -57,13 +58,14 @@ const AddFriendButton: FC<AddFriendButtonProps> = ({}) => {
         htmlFor="email"
         className="block text-sm font-medium leading-6 text-gray-800"
       >
-        Add friend by E-mail
+        Add friend by E-Mail
       </label>
+
       <div className="mt-2 flex gap-4">
         <input
           {...register("email")}
           type="text"
-          className="block w-auto rounded-md border-0 py-1.5
+          className="block w-full rounded-md border-0 py-1.5
            text-gray-800 shadow-lg ring-1 ring-inset ring-gray-400 
            placeholder:text-gray-600 focus:ring-2 focus:ring-inset 
            focus:ring-indigo-800 sm:text-sm sm:leading-6"
@@ -72,9 +74,9 @@ const AddFriendButton: FC<AddFriendButtonProps> = ({}) => {
         />
         <Button className="max-w-sm mx-auto w-auto">Add Friend</Button>
       </div>
-      <p className="mt-1 text-sm text-red-700">{errors.email?.message}</p>
+      <p className="mt-1 text-sm text-red-600">{errors.email?.message}</p>
       {showSuccessState ? (
-        <p className="mt-1 text-sm text-green-500">Friend Request Sent!</p>
+        <p className="mt-1 text-sm text-green-600">Friend request sent!</p>
       ) : null}
     </form>
   );
