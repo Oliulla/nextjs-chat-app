@@ -2,7 +2,7 @@ import Providers from "@/components/Providers";
 import "./globals.css";
 
 export const metadata = {
-  title: "FreeChat",
+  title: "FriendZone",
   description: "Fell free to chat here",
 };
 
